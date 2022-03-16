@@ -1,1 +1,1 @@
-Download and extract. I don't know if it will work on a school chromebook
+Click on the link its in the about section on the right or click [https://nuker102.github.io/Cookie-Clicker-Beta-2.031/](url)
