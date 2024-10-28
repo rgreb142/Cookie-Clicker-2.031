@@ -1,13 +1,3 @@
-/*
-All this code is copyright Orteil, 2013-2020.
-	-with some help, advice and fixes by Nicholas Laux, Debugbro, Opti, and lots of people on reddit, Discord, and the DashNet forums
-	-also includes a bunch of snippets found on stackoverflow.com and others
-	-want to mod the game? scroll down to the "MODDING API" section
-Hello, and welcome to the joyous mess that is main.js. Code contained herein is not guaranteed to be good, consistent, or sane. Most of this is years old at this point and harkens back to simpler, cruder times. In particular I've tried to maintain compatibility with fairly old versions of javascript, which means luxuries such as 'let', arrow functions and string literals are unavailable. Have a nice trip.
-Spoilers ahead.
-http://orteil.dashnet.org
-*/
-
 var VERSION=2.031;
 var BETA=0;
 
@@ -14488,3 +14478,77 @@ window.onload=function()
 		}
 	}
 };
+// A function that creates buttons in the top bar
+var createButton = function (intervalId, textStart, textStop, func) {
+  var topBar = document.getElementById('topBar');
+  var block = document.createElement('div');
+  var link = document.createElement('a');
+
+  // I use here a link instead of a button only to support styles of the app
+  link.innerText = textStart;
+  link.setAttribute('href', '#cookies');
+  link.addEventListener('click', function (event) {
+    event.preventDefault();
+
+    if (intervalId) {
+      link.innerText = textStart;
+
+      clearInterval(intervalId);
+      intervalId = null;
+    } else {
+      link.innerText = textStop;
+
+      intervalId = setInterval(func, 1);
+    }
+  });
+
+  block.appendChild(link);
+  topBar.insertBefore(block, topBar.firstChild);
+};
+
+// Variables to store interval IDs
+var goldenCookieInterval = null;
+var bigCookieInterval = null;
+var newsInterval = null;
+
+
+// The button that triggers automatic clicks to the golden cookies
+createButton(
+  goldenCookieInterval,
+  'Start GC clicks',
+  'Stop GC clicks',
+  function () {
+    var shimmers = document.getElementById('shimmers').children;
+    for (var i = 0; i < shimmers.length; i++) {
+      shimmers[i].click();
+    }
+  }
+);
+
+// The button that triggers automatic clicks to the big cookie
+createButton(
+  bigCookieInterval,
+  'Start BC clicks',
+  'Stop BC clicks',
+  function () {
+    document.getElementById('bigCookie').click();
+
+    Game.lastClick -= 0;
+  }
+);
+
+// The button that triggers automatic clicks to the news
+createButton(
+  newsInterval,
+  'Start News clicks',
+  'Stop News clicks',
+  function () {
+    var news = document.getElementById('commentsText1');
+    var newsChildren = news.children;
+    for (var j = 0; j < newsChildren.length; j++) {
+      if (newsChildren[j].className === 'fortune') {
+        newsChildren[j].click();
+      }
+    }
+  }
+);
